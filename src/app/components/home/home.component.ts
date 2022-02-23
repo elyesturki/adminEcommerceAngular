@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject, Subscriber, Subscription } from 'rxjs';
-import { ResponseAPI } from 'src/app/models/responseAPI';
+import { ResAPIProduct } from 'src/app/models/responseAPI';
 import { ProductsService } from 'src/app/services/products.service';
 import { Product } from '../../models/product';
 
@@ -18,9 +18,8 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.productSub = this.productService.getProducts().subscribe({
-        next: (res: ResponseAPI)=> {
+        next: (res: ResAPIProduct)=> {
           this.products = res.result;
-          console.log(this.products);
         },
         error: (err) => {
           console.log('une erreure est produite: ', err);

@@ -8,11 +8,11 @@ import { Product } from 'src/app/models/product';
   styleUrls: ['./products-list.component.scss'],
 })
 export class ProductsListComponent implements OnInit {
-  parentSubject:Subject<any> = new Subject();
+  parentSubject:Subject<boolean> = new Subject();
 
   @Input() products: Product[] | any;
 
-  productModalOpen: Boolean = false;
+  productModalOpen: boolean = false;
 
 
   constructor() { }
