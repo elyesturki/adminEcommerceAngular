@@ -1,1 +1,54 @@
-<p>add-or-edit-product-modal works!</p>
+<clr-wizard #wizard [(clrWizardOpen)]="productModalOpen">
+  <clr-wizard-title>{{ product ? 'Edit product' : 'Create product'}}</clr-wizard-title>
+
+  <clr-wizard-button [type]="'cancel'" >Cancel</clr-wizard-button>
+  <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
+  <clr-wizard-button [type]="'next'">Next</clr-wizard-button>
+  <clr-wizard-button [type]="'finish'">Finish</clr-wizard-button>
+
+  <clr-wizard-page>
+      <ng-template clrPageTitle>Select Category</ng-template>
+      <ng-template clrPageNavTitle>Step 1</ng-template>
+      <!-- <p>
+          <button class="btn btn-secondary" (click)="wizard.toggleStepTwo()">
+              <span *ngIf="skipStepTwo">Product Infos</span>
+              <span *ngIf="!skipStepTwo">Hide Page 2</span>
+          </button>
+      </p> -->
+  </clr-wizard-page>
+
+  <form *ngIf="productFrom" [formGroup]="productFrom">
+    <clr-wizard-page>
+      <ng-template clrPageTitle>Product Infos</ng-template>
+      <ng-template clrPageNavTitle>Step 2</ng-template>
+      <div formGroupName="productInfos">
+        <clr-input-container>
+          <label>Product Name</label>
+          <input clrInput placeholder="Product name ..." name="name" formControlName="name"/>
+        </clr-input-container>
+        <clr-textarea-container>
+          <label>Description</label>
+          <textarea clrTextarea formControlName="description" name="description"></textarea>
+        </clr-textarea-container>
+        <clr-input-container>
+          <label>Price</label>
+          <input clrInput placeholder="Price ..." name="price" formControlName="price"/>
+        </clr-input-container>
+        <clr-input-container>
+          <label>Stock</label>
+          <input clrInput placeholder="Stock ..." name="stock" formControlName="stock"/>
+        </clr-input-container>
+      </div>
+    </clr-wizard-page>
+    <clr-wizard-page>
+        <ng-template clrPageTitle>Add Image</ng-template>
+        <ng-template clrPageNavTitle>Step 3</ng-template>
+        <div formGroupName="illustration">
+          <clr-input-container>
+            <label>Product Image</label>
+            <input clrInput type="file" placeholder="Image ..." name="image" formControlName="image"/>
+          </clr-input-container>
+        </div>
+    </clr-wizard-page>
+  </form>
+</clr-wizard>
