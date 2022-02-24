@@ -1,6 +1,10 @@
 <h1>List of Product</h1>
 
-<app-add-or-edit-product-modal [pushParentSubject]="parentSubject"></app-add-or-edit-product-modal>
+<app-add-or-edit-product-modal
+  [pushParentSubject]="parentSubject"
+  [product] = "selectedProduct"
+  (finishForm)="handleFinish($event)"
+  ></app-add-or-edit-product-modal>
 
 <clr-datagrid>
   <clr-dg-action-bar>

@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 import { Product } from 'src/app/models/product';
@@ -13,14 +13,15 @@ import { ResponseAPICat } from 'src/app/models/responseAPI';
 })
 export class AddOrEditProductModalComponent implements OnInit, OnDestroy {
 
-  @Input() product: Product | undefined ;
-  @Input() pushParentSubject: Subject<any> | undefined;
+  @Input() product: Product;
+  @Input() pushParentSubject: Subject<any>;
+  @Output() finishForm = new EventEmitter();
 
   productModalOpen = false;
-  categories: Category[] | any;
-  categorySub : Subscription | undefined;
+  categories: Category[];
+  categorySub : Subscription;
 
-  productFrom: FormGroup | undefined;
+  productFrom : FormGroup;
   idCategory = 1;
 
   constructor(private formBuilder:FormBuilder, private categoriesService:CategoriesService) {
@@ -39,18 +40,16 @@ export class AddOrEditProductModalComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // open modal event
-    if (this.pushParentSubject) {
       this.pushParentSubject.subscribe(event => {
         this.productModalOpen = event;
         //changement des categories aprés l'ouverture du modal
         this.getCaregories();
-      });
-    }
+      })
   }
 
   ngOnDestroy(): void {
-    if (this.pushParentSubject) this.pushParentSubject.unsubscribe();
-    if (this.categorySub) this.categorySub.unsubscribe();
+    this.pushParentSubject.unsubscribe();
+    this.categorySub.unsubscribe();
   }
 
   getCaregories() {
@@ -63,5 +62,36 @@ export class AddOrEditProductModalComponent implements OnInit, OnDestroy {
 
   selectCategory(idCategory: number) {
     this.idCategory = idCategory;
+  }
+
+  get invalidProductInfos() : boolean {
+    return this.productFrom.get('productInfos').invalid;
+  }
+
+  get invalidIllustration() : boolean {
+    return this.productFrom.get('illustration').invalid;
+  }
+
+  close() {
+    this.productFrom.reset();
+    this.idCategory = 1;
+  }
+
+  handleCancel() {
+    this.close();
+    this.productModalOpen=false;
+  }
+
+  handleFinish() {
+    const product = {
+      ...this.productFrom.get('productInfos').value,
+      ...this.productFrom.get('illustration').value,
+      category: this.idCategory
+    }
+    this.close();
+    this.finishForm.emit(
+      // send this object to parent list
+      product
+    )
   }
 }

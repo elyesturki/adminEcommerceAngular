@@ -10,9 +10,10 @@ import { Product } from 'src/app/models/product';
 export class ProductsListComponent implements OnInit {
   parentSubject:Subject<boolean> = new Subject();
 
-  @Input() products: Product[] | any;
+  @Input() products: Product[];
 
   productModalOpen: boolean = false;
+  selectedProduct: Product;
 
 
   constructor() { }
@@ -25,6 +26,9 @@ export class ProductsListComponent implements OnInit {
   onEdit( product: Product) : void {
     this.productModalOpen = true;
     this.parentSubject.next(this.productModalOpen);
+
+    this.selectedProduct = product;
+    console.log(this.selectedProduct);
   }
 
   onDelete(product: Product) : void {
@@ -33,6 +37,18 @@ export class ProductsListComponent implements OnInit {
 
   onAdd() : void {
     this.productModalOpen = true;
+    this.parentSubject.next(this.productModalOpen);
+    this.selectedProduct = null;
+  }
+
+  handleFinish(recivedProduct: Product) {
+    console.log('added product: ', recivedProduct);
+    if(this.selectedProduct) {
+      console.log('edit Product');
+    } else {
+      console.log('add Product');
+    }
+    this.productModalOpen = false;
     this.parentSubject.next(this.productModalOpen);
   }
 
